@@ -5,27 +5,52 @@ import com.demo.FlightQuote.FlightService;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class Main {
 
     public static void main(String[] args) {
-        //arrayDemo();
-        flightQuoteDemo();
+        arrayDemo();
+        //flightQuoteDemo();
     }
 
     private static void arrayDemo() {
         var array = new Array(3);
         array.insert(10);
         array.insert(20);
+        array.insert(50);
+        array.insert(50);
         array.insert(30);
+        System.out.print("insert: ");
         array.print();
 
+        System.out.println("getSize: " + array.getSize());
         System.out.println("getValue: " + array.getValue(1));
         System.out.println("indexOf: " + array.indexOf(30));
+        System.out.println("max: " + array.max());
+
+        array.insertAt(2, 44);
+        System.out.print("insertAt: ");
+        array.print();
 
         array.removeAt(1);
+        System.out.print("removeAt: ");
+        array.print();
+
+        var other = new Array(5);
+        other.insert(0);
+        other.insert(60);
+        other.insert(30);
+        other.insert(30);
+        other.insert(50);
+        var intersect = array.intersect(other);
+        System.out.print("intersect: ");
+        intersect.print();
+
+        array.reverse();
+        System.out.print("reverse: ");
         array.print();
     }
 
@@ -36,9 +61,7 @@ public class Main {
 
         var futureFlightQuotes = flightQuotes
                 .map(futureFlightQuote -> futureFlightQuote
-                        .thenAcceptAsync(result -> {
-                            System.out.println(result.toString());
-                        }))
+                        .thenAcceptAsync(result -> System.out.println(result.toString())))
                 .collect(Collectors.toList());
 
         CompletableFuture
