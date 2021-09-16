@@ -1,7 +1,8 @@
-# Flight Quote Java console app
+# Java demo console app
 
 Simple console application Java.
 
+## Flight Quote Demo
 This console application simulates to call three different flight sites to retrieve flight quotes in an async workflow.
 
 It uses `Thread.sleep` to simulate calls made to an imaginary flight sites (API).
