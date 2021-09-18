@@ -65,36 +65,40 @@ public class LinkedList {
     }
 
     public void deleteFirst() {
-        if (first != null) {
-            var nextNode = first.getNext();
-            first = nextNode;
-        } else {
-            first = null;
-        }
+        if (!isEmpty()) {
+            if (first == last) {
+                first = last = null;
+            } else {
+                var second = first.getNext();
+                first.next = null;
+                first = second;
+            }
 
-        size--; // Decrease by 1
+            size--; // Decrease by 1
+        }
     }
 
     public void deleteLast() {
-        size--; // Decrease by 1
+        if (!isEmpty()) {       // Could also throw exception if list is empty
+            var currentNode = first;
+
+            // Performance O(n-1) -> Linear; Traverse to second to last item
+            while (currentNode != null) {
+                if (currentNode.getNext() == last) {
+                    currentNode.setNext(null);
+                    last = currentNode;
+                    break;
+                }
+
+                currentNode = currentNode.getNext();
+            }
+
+            size--; // Decrease by 1
+        }
     }
 
     public boolean cointains(int number) {
-        var currentNode = first;
-
-        // Performance O(n) -> Linear
-            // Worst case: O(n) number at last node item
-            // Best case: O(1) number at first node item
-        // Size O(1) -> currentNode
-        while (currentNode != null) {
-            if (currentNode.getValue() == number) {
-                return true;
-            }
-
-            currentNode = currentNode.getNext();
-        }
-
-        return false;
+        return indexOf(number) != -1; // O(n)
     }
 
     public int indexOf(int number) {
@@ -102,7 +106,7 @@ public class LinkedList {
         var index = 0;
 
         // Performance O(n) -> Linear
-            // Worst case: O(n) number at last node item
+            // Worst case: O(n) number at last node item or not found
             // Best case: O(1) number at first node item
         // Size O(2) ->
             // O(1) -> currentNode

@@ -31,6 +31,7 @@ public class Main {
         System.out.println("getSize: " + array.getSize());
         System.out.println("getValue: " + array.getValue(1));
         System.out.println("indexOf: " + array.indexOf(30));
+        System.out.println("indexOf: " + array.indexOf(100));
         System.out.println("max: " + array.max());
 
         array.insertAt(2, 44);
@@ -63,6 +64,23 @@ public class Main {
         linkedList.addLast(20);
         linkedList.addLast(30);
         System.out.print("addLast: ");
+        linkedList.print();
+
+        linkedList.addFirst(5);
+        System.out.print("addFirst: ");
+        linkedList.print();
+
+        System.out.println("indexOf: " + linkedList.indexOf(20));
+        System.out.println("indexOf: " + linkedList.indexOf(40));
+        System.out.println("cointains: " + linkedList.cointains(20));
+        System.out.println("cointains: " + linkedList.cointains(40));
+
+        linkedList.deleteFirst();
+        System.out.print("deleteFirst: ");
+        linkedList.print();
+
+        linkedList.deleteLast();
+        System.out.print("deleteLast: ");
         linkedList.print();
     }
 
