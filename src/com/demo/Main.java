@@ -1,6 +1,7 @@
 package com.demo;
 
 import com.demo.DataStructuresAndAlgorithms.Array;
+import com.demo.DataStructuresAndAlgorithms.LinkedList;
 import com.demo.FlightQuote.FlightService;
 
 import java.time.Duration;
@@ -12,7 +13,8 @@ import java.util.stream.Collectors;
 public class Main {
 
     public static void main(String[] args) {
-        arrayDemo();
+        //arrayDemo();
+        linkedListDemo();
         //flightQuoteDemo();
     }
 
@@ -52,6 +54,16 @@ public class Main {
         array.reverse();
         System.out.print("reverse: ");
         array.print();
+    }
+
+    private static void linkedListDemo() {
+        var linkedList = new LinkedList();
+
+        linkedList.addLast(10);
+        linkedList.addLast(20);
+        linkedList.addLast(30);
+        System.out.print("addLast: ");
+        linkedList.print();
     }
 
     private static void flightQuoteDemo() {

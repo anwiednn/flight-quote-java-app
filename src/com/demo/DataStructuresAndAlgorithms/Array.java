@@ -60,6 +60,7 @@ public class Array {
         if (index < 0 || index >= size) {
             throw new IllegalArgumentException();
         }
+
         // Performance O(n) -> Linear
             // Worst case: O(n) index == 0; Add before first item and shift all values
             // Best case: O(1) index == numbers.length; Add after last item
@@ -70,6 +71,7 @@ public class Array {
         for (int i = index; i < index; i++) {
             items[i] = items[i - 1]; // Shift values
         }
+
         items[index] = number;
         size++; // Increase by 1
     }
