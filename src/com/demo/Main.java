@@ -7,6 +7,7 @@ import com.demo.FlightQuote.FlightService;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.Stack;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -14,8 +15,9 @@ public class Main {
 
     public static void main(String[] args) {
         //arrayDemo();
-        linkedListDemo();
         //flightQuoteDemo();
+        //linkedListDemo();
+        //reverseStringUsingStack();
     }
 
     private static void arrayDemo() {
@@ -55,6 +57,27 @@ public class Main {
         array.reverse();
         System.out.print("reverse: ");
         array.print();
+    }
+
+    private static void flightQuoteDemo() {
+        var startTime = LocalTime.now();
+        var flightService = new FlightService();
+        var flightQuotes = flightService.getQuotes();
+
+        var futureFlightQuotes = flightQuotes
+                .map(futureFlightQuote -> futureFlightQuote
+                        .thenAcceptAsync(result -> System.out.println(result.toString())))
+                .collect(Collectors.toList());
+
+        CompletableFuture
+                .allOf(futureFlightQuotes.toArray(new CompletableFuture[0]))
+                .thenRun(() -> {
+                    var endTime = LocalTime.now();
+                    var duration = Duration.between(startTime, endTime);
+                    System.out.println("All completed");
+                    System.out.println("Retrieved all quotes in " + (duration.toMillis()) + " msec.");
+                })
+                .join();
     }
 
     private static void linkedListDemo() {
@@ -103,24 +126,19 @@ public class Main {
         linkedList.print();
     }
 
-    private static void flightQuoteDemo() {
-        var startTime = LocalTime.now();
-        var flightService = new FlightService();
-        var flightQuotes = flightService.getQuotes();
+    private static void reverseStringUsingStack() {
+        var text = "abcd";
+        var reversedText = "";
+        var stack = new Stack<Character>();
 
-        var futureFlightQuotes = flightQuotes
-                .map(futureFlightQuote -> futureFlightQuote
-                        .thenAcceptAsync(result -> System.out.println(result.toString())))
-                .collect(Collectors.toList());
+        for (var i = 0; i < text.length(); i++) {
+            stack.push(text.charAt(i));
+        }
 
-        CompletableFuture
-                .allOf(futureFlightQuotes.toArray(new CompletableFuture[0]))
-                .thenRun(() -> {
-                    var endTime = LocalTime.now();
-                    var duration = Duration.between(startTime, endTime);
-                    System.out.println("All completed");
-                    System.out.println("Retrieved all quotes in " + (duration.toMillis()) + " msec.");
-                })
-                .join();
+        while(!stack.empty()) {
+            reversedText += stack.pop();
+        }
+
+        System.out.println(reversedText);
     }
 }
