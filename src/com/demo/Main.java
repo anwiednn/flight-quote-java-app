@@ -128,17 +128,17 @@ public class Main {
 
     private static void reverseStringUsingStack() {
         var text = "abcd";
-        var reversedText = "";
+        var reversedTextBuffer = new StringBuffer();
         var stack = new Stack<Character>();
 
-        for (var i = 0; i < text.length(); i++) {
-            stack.push(text.charAt(i));
+        for (char ch : text.toCharArray()) {
+            stack.push(ch);
         }
 
         while(!stack.empty()) {
-            reversedText += stack.pop();
+            reversedTextBuffer.append(stack.pop());
         }
 
-        System.out.println(reversedText);
+        System.out.println(reversedTextBuffer.toString());
     }
 }
