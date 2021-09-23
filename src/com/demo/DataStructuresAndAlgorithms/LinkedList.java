@@ -1,29 +1,10 @@
 package com.demo.DataStructuresAndAlgorithms;
 
-import org.w3c.dom.Node;
+import java.security.InvalidParameterException;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 public class LinkedList {
-    private class Node {
-        private int value;
-        private Node next;
-
-        public Node(int value) {
-            this.value = value;
-        }
-
-        public Node getNext() {
-            return next;
-        }
-
-        public int getValue() {
-            return value;
-        }
-
-        public void setNext(Node next) {
-            this.next = next;
-        }
-    }
-
     private Node first;
     private Node last;
     private int size;
@@ -42,11 +23,15 @@ public class LinkedList {
             node.setNext(first);
             first = node;
         }
-        
+
         size++; // Increase by 1
     }
 
     public void addLast(int number) {
+        addLast(number, false);
+    }
+
+    public void addLast(int number, boolean linkToFirst) {
         var node = new Node(number);
 
         // Performance O(2)
@@ -61,44 +46,133 @@ public class LinkedList {
             last = node;
         }
 
+        if (linkToFirst) {
+            last.setNext(first);
+        }
+
         size++; // Increase by 1
     }
 
     public void deleteFirst() {
-        if (!isEmpty()) {
-            if (first == last) {
-                first = last = null;
-            } else {
-                var second = first.getNext();
-                first.next = null;
-                first = second;
-            }
-
-            size--; // Decrease by 1
+        if (isEmpty()) {
+            throw new NoSuchElementException();
         }
+
+        if (first == last) {
+            first = last = null;
+        } else {
+            var second = first.getNext();
+            first.next = null;
+            first = second;
+        }
+
+        size--; // Decrease by 1
     }
 
     public void deleteLast() {
-        if (!isEmpty()) {       // Could also throw exception if list is empty
-            var currentNode = first;
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
 
-            // Performance O(n-1) -> Linear; Traverse to second to last item
-            while (currentNode != null) {
-                if (currentNode.getNext() == last) {
-                    currentNode.setNext(null);
-                    last = currentNode;
-                    break;
-                }
+        var currentNode = first;
 
-                currentNode = currentNode.getNext();
+        // Performance O(n-1) -> Linear; Traverse to second to last item
+        while (currentNode != null) {
+            if (currentNode.getNext() == last) {
+                currentNode.setNext(null);
+                last = currentNode;
+                break;
             }
 
-            size--; // Decrease by 1
+            currentNode = currentNode.getNext();
         }
+
+        size--; // Decrease by 1
     }
 
     public boolean cointains(int number) {
         return indexOf(number) != -1; // O(n)
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int getKthFromTheEnd(int k) {
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        else if (k < 0 || k > size) {
+            throw new InvalidParameterException();
+        }
+
+        // [10, 20, 30, 40, 50]
+        //          3   2   1      3rd item from end
+        //          *1      *2      *1 == first pointer; *2 == second pointer; 2 nodes ahead
+        var firstPointer = first;
+        var secondPointer = first;
+
+        // Size O(3) ->
+            // O(1) -> i
+            // O(2) -> firstPointer, secondPointer
+        for (var i = 0; i < k - 1; i++) {         // Move second pointer ahead by (k - 1)
+            secondPointer = secondPointer.getNext();
+        }
+
+        // Performance O(n) -> Traverse entire list
+        while (secondPointer != last) {
+            firstPointer = firstPointer.getNext();
+            secondPointer = secondPointer.getNext();
+        }
+
+        return firstPointer.getValue();
+    }
+
+    public int[] getMiddle() {
+        if (isEmpty()) {
+            throw new NoSuchElementException();
+        }
+
+        // Uneven node size
+            //Number of Nodes       Middle Node
+            //      1                   1
+            //      3                   2
+            //      5                   3
+            //      6                   4
+        // Even node size
+            //      2                  1,2
+            //      4                  2,3
+            //      6                  3,4
+
+        var middlePointer = first;
+        var lastPointer = first;
+
+        // Performance O(n) -> Traverse entire list
+        while (lastPointer != last && lastPointer.getNext() != last) {
+            middlePointer = middlePointer.getNext();                // Move ahead by one step
+            lastPointer = lastPointer.getNext().getNext();          // Move ahead by two steps
+        }
+
+        return (size % 2 == 0)
+            ? List.of(middlePointer.getValue(), middlePointer.getNext().getValue()).stream().mapToInt(i -> i).toArray()
+            : List.of(middlePointer.getValue()).stream().mapToInt(i -> i).toArray();
+    }
+
+    public boolean hasLoop() {
+        var slowPointer = first;
+        var fastPointer = first;
+
+        // Performance O(n) -> Traverse entire list
+        while (fastPointer != null && fastPointer.next != null) {
+            slowPointer = slowPointer.next;             // Move ahead by one step
+            fastPointer = fastPointer.next.next;        // Move ahead by two steps
+
+            if (slowPointer == fastPointer) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public int indexOf(int number) {
@@ -144,11 +218,91 @@ public class LinkedList {
         }
     }
 
-    public int getSize() {
-        return size;
+    public void reverse() {
+        // 1: [10 -> 20 -> 30]
+        //     p     c     n
+        // 2: [10 <- 20    30]
+        //           p     c     n
+        // 3: [10 <- 20 <- 30]
+        //                 p     c     n  == Complete loop
+
+        if (!isEmpty()) {
+            // Performance O(n) -> Traverse entire list
+            var previous = first;
+            var current = first.next;
+
+            while (current != null) {
+                var next = current.getNext();
+                current.setNext(previous);
+                previous = current;
+                current = next;
+            }
+
+            last = first;           // Current first node becomes last
+            last.setNext(null);     // Set next to null
+            first = previous;       // Last previous becomes firat
+
+            /*
+            My implementation: O(2n)
+
+            var index = 0;
+            var items = new int[size];
+            var current = first;
+
+            // Performance O(n) -> Traverse entire list
+            while (current != null) {
+               items[(size-1)-index] = current.getValue();
+               current = current.getNext();
+               index++; // Increase by 1
+            }
+
+            // Performance O(n) -> Traverse entire items array
+            for (var i = 0; i < items.length; i++) {
+                addLast(items[i]);  // O(1)
+                deleteFirst();      // O(1)
+            }*/
+        }
+    }
+
+    public int[] toArray() {
+        var index = 0;
+        var items = new int[size];
+        var current = first;
+
+        // Performance O(n) -> Traverse entire list
+        // Size O(1+n) ->
+            // O(1) -> index
+            // O(n) -> items; n = size
+        while (current != null) {
+            items[index++] = current.getValue();
+            current = current.getNext();
+        }
+
+        return items;
     }
 
     private boolean isEmpty() {
         return first == null;
+    }
+
+    private class Node {
+        private int value;
+        private Node next;
+
+        public Node(int value) {
+            this.value = value;
+        }
+
+        public Node getNext() {
+            return next;
+        }
+
+        public void setNext(Node next) {
+            this.next = next;
+        }
+
+        public int getValue() {
+            return value;
+        }
     }
 }

@@ -63,6 +63,9 @@ public class Main {
         linkedList.addLast(10);
         linkedList.addLast(20);
         linkedList.addLast(30);
+        linkedList.addLast(40);
+        linkedList.addLast(50);
+        linkedList.addLast(60);
         System.out.print("addLast: ");
         linkedList.print();
 
@@ -74,6 +77,16 @@ public class Main {
         System.out.println("indexOf: " + linkedList.indexOf(40));
         System.out.println("cointains: " + linkedList.cointains(20));
         System.out.println("cointains: " + linkedList.cointains(40));
+        System.out.println("getKthFromTheEnd: " + linkedList.getKthFromTheEnd(2));
+        System.out.println("getKthFromTheEnd: " + linkedList.getKthFromTheEnd(3));
+
+        System.out.println("getMiddle (uneven): " + Arrays.toString(linkedList.getMiddle()));
+        linkedList.addLast(70);
+        System.out.println("getMiddle (even): " + Arrays.toString(linkedList.getMiddle()));
+
+        System.out.println("hasLoop: " + linkedList.hasLoop());
+        linkedList.addLast(80, true);
+        System.out.println("hasLoop (link to first): " + linkedList.hasLoop());
 
         linkedList.deleteFirst();
         System.out.print("deleteFirst: ");
@@ -81,6 +94,12 @@ public class Main {
 
         linkedList.deleteLast();
         System.out.print("deleteLast: ");
+        linkedList.print();
+
+        System.out.println("toArray: " + Arrays.toString(linkedList.toArray()));
+
+        linkedList.reverse();
+        System.out.print("reverse: ");
         linkedList.print();
     }
 
