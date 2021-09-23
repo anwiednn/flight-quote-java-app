@@ -62,9 +62,9 @@ public class Main {
     }
 
     private static void balancedExpressionUsingStack() {
-        var text = "(<1> + 2)"; // <> {} () []
+        var text = "](<1> + 2)"; // <> {} () []
         var stack = new Stack<Character>();
-        var result = true;
+        var charMatch = true;
         var openingChar = List.of('<', '{', '(', '[');
         var closingChar = List.of('>', '}', ')', ']');
 
@@ -72,18 +72,22 @@ public class Main {
             if (openingChar.contains(ch)) {
                 stack.push(ch);
             } else if (closingChar.contains(ch)) {
-                var lastCh = stack.pop();
-                var openingIndex = openingChar.indexOf(lastCh);
-                var closingIndex = closingChar.indexOf(ch);
-                result = openingIndex == closingIndex;
+                if (stack.empty()) {
+                    charMatch = false;
+                } else {
+                    var lastCh = stack.pop();
+                    var openingIndex = openingChar.indexOf(lastCh);
+                    var closingIndex = closingChar.indexOf(ch);
+                    charMatch = openingIndex == closingIndex;
+                }
             }
 
-            if (!result) {
+            if (!charMatch) {
                 break;
             }
         }
 
-        System.out.println("Balance Expression: " + (result && stack.empty()));
+        System.out.println("Balance Expression: " + (charMatch && stack.empty()));
     }
 
     private static void flightQuoteDemo() {
