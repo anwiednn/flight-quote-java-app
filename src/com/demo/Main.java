@@ -7,6 +7,7 @@ import com.demo.FlightQuote.FlightService;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ public class Main {
 
     public static void main(String[] args) {
         //arrayDemo();
+        //balancedExpressionUsingStack();
         //flightQuoteDemo();
         //linkedListDemo();
         //reverseStringUsingStack();
@@ -57,6 +59,31 @@ public class Main {
         array.reverse();
         System.out.print("reverse: ");
         array.print();
+    }
+
+    private static void balancedExpressionUsingStack() {
+        var text = "(<1> + 2)"; // <> {} () []
+        var stack = new Stack<Character>();
+        var result = true;
+        var openingChar = List.of('<', '{', '(', '[');
+        var closingChar = List.of('>', '}', ')', ']');
+
+        for (char ch : text.toCharArray()) {
+            if (openingChar.contains(ch)) {
+                stack.push(ch);
+            } else if (closingChar.contains(ch)) {
+                var lastCh = stack.pop();
+                var openingIndex = openingChar.indexOf(lastCh);
+                var closingIndex = closingChar.indexOf(ch);
+                result = openingIndex == closingIndex;
+            }
+
+            if (!result) {
+                break;
+            }
+        }
+
+        System.out.println("Balance Expression: " + (result && stack.empty()));
     }
 
     private static void flightQuoteDemo() {
