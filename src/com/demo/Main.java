@@ -20,6 +20,7 @@ public class Main {
         //flightQuoteDemo();
         //linkedListDemo();
         //reverseStringUsingStack();
+        //stackDemo();
     }
 
     private static void arrayDemo() {
@@ -171,5 +172,9 @@ public class Main {
         }
 
         System.out.println(reversedTextBuffer.toString());
+    }
+
+    private static void stackDemo() {
+        var stack = new Stack();
     }
 }
